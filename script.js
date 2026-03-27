@@ -51,11 +51,15 @@ digits.addEventListener("click" , (e) => {
 
         if(operator == "")  {
 
+            if(firstOperand.includes(".") && e.target.textContent == ".") return
+
             firstOperand += e.target.textContent
             display.textContent = firstOperand
         }
 
         else    {
+
+            if(secondOperand.includes(".") && e.target.textContent == ".") return
 
             secondOperand += e.target.textContent
             display.textContent = secondOperand
@@ -81,6 +85,7 @@ operations.addEventListener("click" , (e) => {
             const result = operate(Number(firstOperand) , Number(secondOperand) , operator)
             display.textContent = result
 
+    
             firstOperand = String(result)
             secondOperand = ""
 
@@ -122,3 +127,4 @@ controls.addEventListener("click" , (e) => {
 
     }
 })
+
