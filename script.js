@@ -53,15 +53,58 @@ digits.addEventListener("click" , (e) => {
 
             if(firstOperand.includes(".") && e.target.textContent == ".") return
 
-            firstOperand += e.target.textContent
+            else if(e.target.textContent == "+/-") {
+
+                if(firstOperand == "") return
+
+
+                if(firstOperand[0] != "-") {
+
+                    firstOperand = "-" + firstOperand
+                }
+
+                else if(firstOperand[0] == "-") {
+
+                    firstOperand = firstOperand.slice(1, firstOperand.length)
+                }
+            }
+
+            else {
+
+                firstOperand += e.target.textContent
+            }
+
             display.textContent = firstOperand
+
+
+
         }
 
         else    {
 
             if(secondOperand.includes(".") && e.target.textContent == ".") return
 
-            secondOperand += e.target.textContent
+            else if(e.target.textContent == "+/-") {
+
+                if(secondOperand == "") return
+
+                if(secondOperand[0] != "-") {
+
+                    secondOperand = "-" + secondOperand
+                }
+
+                else if(secondOperand[0] == "-") {
+
+                    secondOperand = secondOperand.slice(1, secondOperand.length)
+                }
+
+            }
+
+            else {
+
+                secondOperand += e.target.textContent
+            }
+
             display.textContent = secondOperand
 
         }
@@ -88,6 +131,7 @@ operations.addEventListener("click" , (e) => {
     
             firstOperand = String(result)
             secondOperand = ""
+            operator = ""
 
             if(e.target.textContent != "=") {
 
