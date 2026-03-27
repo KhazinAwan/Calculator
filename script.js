@@ -43,6 +43,7 @@ console.log(operate(10 , 5 , '/'))*/
 const digits = document.querySelector(".digits")
 const operations = document.querySelector(".operators")
 const display = document.querySelector(".display")
+const controls = document.querySelector(".controls")
 
 digits.addEventListener("click" , (e) => {
 
@@ -51,13 +52,13 @@ digits.addEventListener("click" , (e) => {
         if(operator == "")  {
 
             firstOperand += e.target.textContent
-            console.log(`${firstOperand}`)
+            display.textContent = firstOperand
         }
 
         else    {
 
             secondOperand += e.target.textContent
-            console.log(`${secondOperand}`)
+            display.textContent = secondOperand
 
         }
     }
@@ -89,5 +90,35 @@ operations.addEventListener("click" , (e) => {
 
             }
         }
+    }
+})
+
+controls.addEventListener("click" , (e) => {
+
+    if(e.target.tagName == "BUTTON") {
+
+        if(e.target.textContent == "C") {
+
+            firstOperand = operator = secondOperand = ""
+            display.textContent = 0
+        }
+
+        else if(e.target.textContent == "⌫") {
+
+            if(operator == "") {
+
+                firstOperand = firstOperand.slice(0 , (firstOperand.length - 1))
+                display.textContent = firstOperand
+
+            }
+
+            else {
+
+                secondOperand = secondOperand.slice(0 , (secondOperand.length - 1))
+                display.textContent = secondOperand
+
+            }
+        }
+
     }
 })
