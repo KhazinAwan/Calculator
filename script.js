@@ -2,6 +2,8 @@ let firstOperand = ""
 let operator = ""
 let secondOperand = ""
 
+const MAX_LENGTH = 10
+
 function addition(num1 , num2) {
 
     return num1 + num2
@@ -53,6 +55,8 @@ digits.addEventListener("click" , (e) => {
 
         if(operator == "")  {
 
+            if(firstOperand.length >= MAX_LENGTH) return
+
             if(firstOperand.includes(".") && e.target.textContent == ".") return
 
             else if(e.target.textContent == "+/-") {
@@ -78,11 +82,11 @@ digits.addEventListener("click" , (e) => {
 
             display.textContent = firstOperand
 
-
-
         }
 
         else    {
+
+            if(secondOperand.length >= MAX_LENGTH) return
 
             if(secondOperand.includes(".") && e.target.textContent == ".") return
 
@@ -144,7 +148,15 @@ operations.addEventListener("click" , (e) => {
                 secondOperand = ""
                 operator = ""
 
-                display.textContent = result
+                if(result.toString().length >= MAX_LENGTH) {
+
+                    display.textContent = result.toExponential(5)
+                }
+
+                else {
+
+                    display.textContent = result
+                }
 
                 if(e.target.textContent != "=") operator = e.target.textContent
             }
