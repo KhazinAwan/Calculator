@@ -19,6 +19,8 @@ function multiplication(num1 , num2) {
 
 function division(num1 , num2) {
 
+    if(num2 == 0) return "ERROR"
+
     return num1 / num2
 }
 
@@ -117,27 +119,36 @@ operations.addEventListener("click" , (e) => {
 
         if(e.target.textContent == "=" && secondOperand == "")  return
 
-        if(secondOperand == "") {
+        else if(firstOperand == "") return
 
-            operator = e.target.textContent
-
-        }
+        else if(secondOperand == "") operator = e.target.textContent
 
         else {
 
-            const result = operate(Number(firstOperand) , Number(secondOperand) , operator)
-            display.textContent = result
+            let result = operate(Number(firstOperand) , Number(secondOperand) , operator)
 
-    
-            firstOperand = String(result)
-            secondOperand = ""
-            operator = ""
+            if(result == "ERROR") {
 
-            if(e.target.textContent != "=") {
+                firstOperand = ""
+                operator = ""
+                secondOperand = ""
 
-                operator = e.target.textContent
-
+                display.textContent = result
             }
+
+            else {
+
+                result = Math.round(result * 100000) / 100000
+
+                firstOperand = String(result)
+                secondOperand = ""
+                operator = ""
+
+                display.textContent = result
+
+                if(e.target.textContent != "=") operator = e.target.textContent
+            }
+
         }
     }
 })
