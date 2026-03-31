@@ -2,6 +2,8 @@ let firstOperand = ""
 let operator = ""
 let secondOperand = ""
 
+let operators = ["+" , "-" , "*" , "/"]
+
 const MAX_LENGTH = 10
 
 function addition(num1 , num2) {
@@ -21,177 +23,199 @@ function multiplication(num1 , num2) {
 
 function division(num1 , num2) {
 
-    if(num2 == 0) return "ERROR"
+    if(num2 === 0) return "ERROR"
 
     return num1 / num2
 }
 
-function operate(num1 , num2 , operator) {
+function checkKey(e) {
 
-    if(operator == '+') return addition(num1, num2)
+    e.preventDefault()
 
-    if(operator == '-') return subtraction(num1, num2)
+    if((e.key >= "0"  &&  e.key <= "9") || e.key === ".") { handleDigits(e.key) }
 
-    if(operator == 'x') return multiplication(num1, num2)
+    else if(operators.includes(e.key)) { 
 
-    if(operator == '÷') return division(num1, num2)
+        if(e.key === "/") { handleOperations("÷")}
+
+        else if(e.key === "*") { handleOperations("X")}
+
+        else if(e.key === "=" || e.key === "Enter") {handleOperations("=")}
+
+        else { handleOperations(e.key)}
+        
+    }
+
+    else {
+
+        if(e.key === "Escape" || e.key === "C" || e.key === "c") { handleControls("C")}
+
+        else if(e.key === "Backspace") { handleControls("⌫")}
+    }
 
 }
 
-/*console.log(operate(10 , 5 , '+'))
-console.log(operate(10 , 5 , '-'))
-console.log(operate(10 , 5 , '*'))
-console.log(operate(10 , 5 , '/'))*/
+function operate(num1 , num2 , operator) {
 
+    if(operator === '+') return addition(num1, num2)
 
-const digits = document.querySelector(".digits")
-const operations = document.querySelector(".operators")
-const display = document.querySelector(".display")
-const controls = document.querySelector(".controls")
+    if(operator === '-') return subtraction(num1, num2)
 
-digits.addEventListener("click" , (e) => {
+    if(operator === 'X') return multiplication(num1, num2)
 
-    if(e.target.tagName === "BUTTON"){
+    if(operator === '÷') return division(num1, num2)
 
-        if(operator == "")  {
+}
 
-            if(firstOperand.length >= MAX_LENGTH) return
+function handleOperand(operand , value) {
 
-            if(firstOperand.includes(".") && e.target.textContent == ".") return
+    if(operand.length >= MAX_LENGTH) return operand
 
-            else if(e.target.textContent == "+/-") {
+    if(value === ".") {
 
-                if(firstOperand == "") return
+        if(operand.includes(".")) { return operand }
+        
+        if(operand === "") { operand += "0."}
 
+        else { operand += value}
 
-                if(firstOperand[0] != "-") {
+        return operand
 
-                    firstOperand = "-" + firstOperand
-                }
+    }
 
-                else if(firstOperand[0] == "-") {
+    else if(value === "+/-") {
 
-                    firstOperand = firstOperand.slice(1, firstOperand.length)
-                }
-            }
+        if(operand === "") return operand
 
-            else {
-
-                firstOperand += e.target.textContent
-            }
-
-            display.textContent = firstOperand
-
+        if(operand[0] !== "-") {
+            operand = "-" + operand
         }
 
-        else    {
+        else if(operand[0] === "-") {
 
-            if(secondOperand.length >= MAX_LENGTH) return
-
-            if(secondOperand.includes(".") && e.target.textContent == ".") return
-
-            else if(e.target.textContent == "+/-") {
-
-                if(secondOperand == "") return
-
-                if(secondOperand[0] != "-") {
-
-                    secondOperand = "-" + secondOperand
-                }
-
-                else if(secondOperand[0] == "-") {
-
-                    secondOperand = secondOperand.slice(1, secondOperand.length)
-                }
-
-            }
-
-            else {
-
-                secondOperand += e.target.textContent
-            }
-
-            display.textContent = secondOperand
-
+            operand = operand.slice(1, operand.length)
         }
     }
-})
 
-operations.addEventListener("click" , (e) => {
+    else {
 
-    if(e.target.tagName === "BUTTON") {
+        operand += value
+    }
 
-        if(e.target.textContent == "=" && secondOperand == "")  return
+    return operand
+}
 
-        else if(firstOperand == "") return
+function handleDigits(value) {
 
-        else if(secondOperand == "") operator = e.target.textContent
+    if(operator === "")  {  
+        
+        firstOperand = handleOperand(firstOperand, value)
+        display.textContent = firstOperand || 0
+    
+    }
+
+    else    {  
+        
+        secondOperand = handleOperand(secondOperand, value)
+        display.textContent = secondOperand || 0
+    
+    }
+}
+
+function handleOperations(argOperator) {
+
+    if(argOperator === "=" && secondOperand === "")  return
+
+    else if(firstOperand === "") return
+
+    else if(secondOperand === "") operator = argOperator
+
+    else {
+
+        let result = operate(Number(firstOperand) , Number(secondOperand) , operator)
+
+        if(result === "ERROR") {
+
+            firstOperand = ""
+            operator = ""
+            secondOperand = ""
+
+            display.textContent = result
+        }
 
         else {
 
-            let result = operate(Number(firstOperand) , Number(secondOperand) , operator)
+            result = Math.round(result * 100000) / 100000
 
-            if(result == "ERROR") {
+            firstOperand = String(result)
+            secondOperand = ""
+            operator = ""
 
-                firstOperand = ""
-                operator = ""
-                secondOperand = ""
+            if(result.toString().length >= MAX_LENGTH) {
+
+                display.textContent = result.toExponential(5)
+            }
+
+            else {
 
                 display.textContent = result
             }
 
-            else {
-
-                result = Math.round(result * 100000) / 100000
-
-                firstOperand = String(result)
-                secondOperand = ""
-                operator = ""
-
-                if(result.toString().length >= MAX_LENGTH) {
-
-                    display.textContent = result.toExponential(5)
-                }
-
-                else {
-
-                    display.textContent = result
-                }
-
-                if(e.target.textContent != "=") operator = e.target.textContent
-            }
-
-        }
-    }
-})
-
-controls.addEventListener("click" , (e) => {
-
-    if(e.target.tagName == "BUTTON") {
-
-        if(e.target.textContent == "C") {
-
-            firstOperand = operator = secondOperand = ""
-            display.textContent = 0
-        }
-
-        else if(e.target.textContent == "⌫") {
-
-            if(operator == "") {
-
-                firstOperand = firstOperand.slice(0 , (firstOperand.length - 1))
-                display.textContent = firstOperand
-
-            }
-
-            else {
-
-                secondOperand = secondOperand.slice(0 , (secondOperand.length - 1))
-                display.textContent = secondOperand
-
-            }
+            if(argOperator !== "=") operator = argOperator
         }
 
     }
+}
+
+function handleControls(option) {
+
+    if(option === "C") {
+
+        firstOperand = operator = secondOperand = ""
+        display.textContent = 0
+    }
+
+    else if(option === "⌫") {
+
+        if(operator === "") {
+
+            firstOperand = firstOperand.slice(0 , (firstOperand.length - 1))
+            display.textContent = firstOperand || 0
+
+        }
+
+        else {
+
+            secondOperand = secondOperand.slice(0 , (secondOperand.length - 1))
+            display.textContent = secondOperand || 0
+
+        }
+    }
+
+}
+
+const digit = document.querySelector(".digits")
+const operation = document.querySelector(".operators")
+const display = document.querySelector(".display")
+const control = document.querySelector(".controls")
+
+digit.addEventListener("click" , (e) =>  {
+
+    if(e.target.tagName === "BUTTON") { handleDigits(e.target.textContent)}
 })
+
+operation.addEventListener("click" , (e) => {
+
+    if(e.target.tagName === "BUTTON") { handleOperations(e.target.textContent)}
+
+})
+
+control.addEventListener("click" , (e) => {
+
+    if(e.target.tagName === "BUTTON") { handleControls(e.target.textContent)}
+
+})
+
+
+document.addEventListener("keydown", checkKey)
 
