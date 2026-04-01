@@ -156,3 +156,8 @@ button {
     width: 60px;
     height: 40px;
 }
+
+.clicked {
+
+    border: 2px solid aqua;
+}

@@ -32,6 +32,14 @@ function checkKey(e) {
 
     e.preventDefault()
 
+    const value = mapKey(e.key)
+
+    if(!value) return
+
+    const btn = getButton(value)
+
+    changeBorderColor(btn)
+
     if((e.key >= "0"  &&  e.key <= "9") || e.key === ".") { handleDigits(e.key) }
 
     else if(e.key === "n") { handleDigits("+/-")}
@@ -217,6 +225,52 @@ function handleControls(option) {
 
 }
 
+function mapKey(key) {
+
+    if(key === "Enter" || key === "=") return "="
+
+    else if(key == "Backspace") return "⌫"
+
+    else if(key === "Escape" || key === "c" || key === "C") return "C"
+
+
+    else if(key >= "0" && key <= "9" || key === ".") return key
+
+    else if(key === "n") return "+/-"
+
+
+    else if(key === "/") return "÷"
+
+    else if(key === "*") return "X"
+
+    else if(key === "+") return "+"
+
+    else if(key === "-") return "-"
+
+    else {  return null  }
+}
+
+function getButton(value) {
+
+    const btns = document.querySelectorAll("button")
+
+    return [...btns].find(btn => btn.textContent === value)
+}
+
+function changeBorderColor(btn) {
+
+    btn.classList.add("clicked")
+
+    setTimeout( () => {
+
+        btn.classList.remove("clicked")
+
+
+    } , 150)
+
+}
+
+
 const digit = document.querySelector(".digits")
 const operation = document.querySelector(".operators")
 const display = document.querySelector(".display")
@@ -224,18 +278,33 @@ const control = document.querySelector(".controls")
 
 digit.addEventListener("click" , (e) =>  {
 
-    if(e.target.tagName === "BUTTON") { handleDigits(e.target.textContent)}
+    if(e.target.tagName === "BUTTON") { 
+
+        changeBorderColor(e.target)
+        handleDigits(e.target.textContent)
+    
+    }
 })
 
 operation.addEventListener("click" , (e) => {
 
-    if(e.target.tagName === "BUTTON") { handleOperations(e.target.textContent)}
+    if(e.target.tagName === "BUTTON") { 
+
+        changeBorderColor(e.target)
+        handleOperations(e.target.textContent)
+    
+    }
 
 })
 
 control.addEventListener("click" , (e) => {
 
-    if(e.target.tagName === "BUTTON") { handleControls(e.target.textContent)}
+    if(e.target.tagName === "BUTTON") { 
+
+        changeBorderColor(e.target)
+        handleControls(e.target.textContent)
+
+    }
 
 })
 
