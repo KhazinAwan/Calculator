@@ -34,6 +34,8 @@ function checkKey(e) {
 
     if((e.key >= "0"  &&  e.key <= "9") || e.key === ".") { handleDigits(e.key) }
 
+    else if(e.key === "n") { handleDigits("+/-")}
+
     else if(operators.includes(e.key)) { 
 
         if(e.key === "/") { handleOperations("÷")}
@@ -177,18 +179,39 @@ function handleControls(option) {
 
     else if(option === "⌫") {
 
+        if(display.textContent === "ERROR") return
+
         if(operator === "") {
 
             firstOperand = firstOperand.slice(0 , (firstOperand.length - 1))
-            display.textContent = firstOperand || 0
+
+            if(firstOperand === "" || firstOperand === "-") {
+
+                firstOperand = ""
+                display.textContent = 0
+            }
+
+            else {
+
+                display.textContent = firstOperand
+            }
 
         }
 
         else {
 
             secondOperand = secondOperand.slice(0 , (secondOperand.length - 1))
-            display.textContent = secondOperand || 0
+                   
+            if(secondOperand === "" || secondOperand === "-") {
 
+                secondOperand = ""
+                display.textContent = 0
+            }
+
+            else {
+
+                display.textContent = secondOperand
+            }
         }
     }
 
